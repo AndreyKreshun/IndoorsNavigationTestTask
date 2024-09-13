@@ -39,6 +39,7 @@ fun TransportScheduleScreen() {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
+        SearchWithReverse()
 
         Row(
             modifier = Modifier
