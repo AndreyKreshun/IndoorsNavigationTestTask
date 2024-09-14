@@ -17,8 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SearchWithReverse() {
-    var departure by remember { mutableStateOf("Москва") }
-    var arrival by remember { mutableStateOf("Сергиев Посад") }
+    var departure by remember { mutableStateOf("") }
+    var arrival by remember { mutableStateOf("") }
 
     // Контейнер для размещения текстовых полей и кнопки для реверса
     Row(
@@ -26,17 +26,27 @@ fun SearchWithReverse() {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Поле для ввода места отбытия
-        BasicTextField(
-            value = departure,
-            onValueChange = { departure = it },
+        // Поле для ввода места отбытия с подсказкой
+        Box(
             modifier = Modifier
                 .weight(1f)
                 .background(Color.LightGray)
-                .padding(8.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-            singleLine = true
-        )
+                .padding(8.dp)
+        ) {
+            if (departure.isEmpty()) {
+                Text(
+                    text = "Москва", // Подсказка
+                    color = Color.Gray
+                )
+            }
+            BasicTextField(
+                value = departure,
+                onValueChange = { departure = it },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         // Кнопка для реверса
         IconButton(
@@ -49,23 +59,33 @@ fun SearchWithReverse() {
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_reverse), // Тут используйте свою иконку реверса
+                painter = painterResource(id = R.drawable.ic_reverse), // Иконка реверса
                 contentDescription = "Reverse",
                 tint = Color.Black
             )
         }
 
-        // Поле для ввода места прибытия
-        BasicTextField(
-            value = arrival,
-            onValueChange = { arrival = it },
+        // Поле для ввода места прибытия с подсказкой
+        Box(
             modifier = Modifier
                 .weight(1f)
                 .background(Color.LightGray)
-                .padding(8.dp),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-            singleLine = true
-        )
+                .padding(8.dp)
+        ) {
+            if (arrival.isEmpty()) {
+                Text(
+                    text = "Сергиев Посад", // Подсказка
+                    color = Color.Gray
+                )
+            }
+            BasicTextField(
+                value = arrival,
+                onValueChange = { arrival = it },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 

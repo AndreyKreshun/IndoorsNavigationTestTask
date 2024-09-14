@@ -46,27 +46,6 @@ fun TransportScheduleScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BasicTextField(
-                value = toText,
-                onValueChange = { toText = it },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp),
-                textStyle = TextStyle(fontSize = 16.sp)
-            )
-            /*Icon(
-                imageVector = Icons.Default.ArrowUpward,
-                contentDescription = "Change Direction",
-                modifier = Modifier.size(24.dp)
-            )*/
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             TodayTomorrowButton(text = "Сегодня", selectedDate) {
@@ -103,10 +82,6 @@ fun TransportScheduleScreen() {
         }
     }
 }
-
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun TransportScheduleScreenPreview() {
