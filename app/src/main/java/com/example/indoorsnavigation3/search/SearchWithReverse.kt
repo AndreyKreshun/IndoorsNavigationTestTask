@@ -13,83 +13,53 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.indoorsnavigation3.R
+import com.example.indoorsnavigation3.transportschedulescreen.TransportScheduleViewModel
 
 @Composable
-fun SearchWithReverse() {
-    var departure by remember { mutableStateOf("") }
-    var arrival by remember { mutableStateOf("") }
+fun SearchWithReverse(viewModel: TransportScheduleViewModel) {
+    var departure by remember { viewModel.fromText }
+    var arrival by remember { viewModel.toText }
 
-    // Контейнер для размещения текстовых полей и кнопки для реверса
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Поле для ввода места отбытия с подсказкой
-        Box(
+        // Поле для ввода места отбытия с placeholder "Откуда"
+        TextField(
+            value = departure,
+            onValueChange = { viewModel.updateFromText(it) },
             modifier = Modifier
                 .weight(1f)
-                .background(Color.LightGray)
-                .padding(8.dp)
-        ) {
-            if (departure.isEmpty()) {
-                Text(
-                    text = "Откуда", // Подсказка
-                    color = Color.Gray
-                )
-            }
-            BasicTextField(
-                value = departure,
-                onValueChange = { departure = it },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+                .padding(8.dp),
+            placeholder = { Text("Откуда") },
+            singleLine = true
+        )
 
-        // Кнопка для реверса
         IconButton(
             onClick = {
-                // Обмен значений между местом отправления и прибытия
                 val temp = departure
-                departure = arrival
-                arrival = temp
+                viewModel.updateFromText(arrival)
+                viewModel.updateToText(temp)
             },
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_reverse), // Иконка реверса
+                painter = painterResource(id = R.drawable.ic_reverse),
                 contentDescription = "Reverse",
                 tint = Color.Black
             )
         }
 
-        // Поле для ввода места прибытия с подсказкой
-        Box(
+        // Поле для ввода места прибытия с placeholder "Куда"
+        TextField(
+            value = arrival,
+            onValueChange = { viewModel.updateToText(it) },
             modifier = Modifier
                 .weight(1f)
-                .background(Color.LightGray)
-                .padding(8.dp)
-        ) {
-            if (arrival.isEmpty()) {
-                Text(
-                    text = "Куда", // Подсказка
-                    color = Color.Gray
-                )
-            }
-            BasicTextField(
-                value = arrival,
-                onValueChange = { arrival = it },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+                .padding(8.dp),
+            placeholder = { Text("Куда") },
+            singleLine = true
+        )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSearchWithReverse() {
-    SearchWithReverse()
 }

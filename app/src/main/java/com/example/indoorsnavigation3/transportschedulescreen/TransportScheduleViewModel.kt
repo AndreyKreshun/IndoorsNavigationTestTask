@@ -6,34 +6,39 @@ import androidx.compose.runtime.State
 import com.example.indoorsnavigation3.R
 
 class TransportScheduleViewModel : ViewModel() {
+    // MutableState для хранения значений текстов
+    var fromText = mutableStateOf("")
+        private set
+    var toText = mutableStateOf("")
+        private set
 
-    // Поля для управления состоянием экрана
-    private val _fromText = mutableStateOf("Москва")
-    val fromText: State<String> = _fromText
+    var selectedDate = mutableStateOf("Сегодня")
+        private set
+    var selectedTransport = mutableStateOf(R.drawable.any)
+        private set
 
-    private val _toText = mutableStateOf("")
-    val toText: State<String> = _toText
-
-    private val _selectedDate = mutableStateOf("Сегодня")
-    val selectedDate: State<String> = _selectedDate
-
-    private val _selectedTransport = mutableStateOf(R.drawable.any)
-    val selectedTransport: State<Int> = _selectedTransport
-
-    // Методы для обновления состояния
+    // Обновление текстов
     fun updateFromText(newFromText: String) {
-        _fromText.value = newFromText
+        fromText.value = newFromText
     }
 
     fun updateToText(newToText: String) {
-        _toText.value = newToText
+        toText.value = newToText
+    }
+
+    // Обратная замена мест отправления и прибытия
+    fun reverseFromTo() {
+        val temp = fromText.value
+        fromText.value = toText.value
+        toText.value = temp
     }
 
     fun updateSelectedDate(newDate: String) {
-        _selectedDate.value = newDate
+        selectedDate.value = newDate
     }
 
     fun updateSelectedTransport(newTransport: Int) {
-        _selectedTransport.value = newTransport
+        selectedTransport.value = newTransport
     }
 }
+

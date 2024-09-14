@@ -49,7 +49,8 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-        SearchWithReverse()
+        // Используем SearchWithReverse с текстовыми полями
+        SearchWithReverse(viewModel)
 
         Row(
             modifier = Modifier
