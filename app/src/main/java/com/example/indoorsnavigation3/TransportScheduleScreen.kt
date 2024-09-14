@@ -3,12 +3,9 @@ package com.example.indoorsnavigation3
 
 import DateButton
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +24,8 @@ fun TransportScheduleScreen() {
     var fromText by remember { mutableStateOf("Москва") }
     var toText by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("Сегодня") }
-    var selectedTransport by remember { mutableStateOf("любой") }
+    var selectedTransport by remember { mutableStateOf(R.drawable.any) } // Начальное значение - "любой"
+
 
     Column(
         modifier = Modifier
@@ -63,11 +61,33 @@ fun TransportScheduleScreen() {
                 .padding(bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            TransportButton("любой", selectedTransport) { selectedTransport = "любой" }
-            TransportButton("самолёт", selectedTransport) { selectedTransport = "самолёт" }
-            TransportButton("поезд", selectedTransport) { selectedTransport = "поезд" }
-            TransportButton("электричка", selectedTransport) { selectedTransport = "электричка" }
-            //TransportButton("автобус", selectedTransport) { selectedTransport = "автобус" }
+            TransportButton(
+                iconResId = R.drawable.any, // Иконка для "любой" (можете использовать текст или другую иконку)
+                selectedTransport = selectedTransport,
+                onClick = { selectedTransport = R.drawable.any } // Выбор "любой"
+            )
+
+            // Кнопка для самолёта
+            TransportButton(
+                iconResId = R.drawable.plane, // Иконка самолёта
+                selectedTransport = selectedTransport,
+                onClick = { selectedTransport = R.drawable.plane } // Выбор самолёта
+            )
+            TransportButton(
+                iconResId = R.drawable.train, // Иконка поезда
+                selectedTransport = selectedTransport,
+                onClick = { selectedTransport = R.drawable.train }
+            )
+            TransportButton(
+                iconResId = R.drawable.electric_train, // Иконка электропоезда
+                selectedTransport = selectedTransport,
+                onClick = { selectedTransport = R.drawable.electric_train }
+            )
+            TransportButton(
+                iconResId = R.drawable.bus, // Иконка автобуса
+                selectedTransport = selectedTransport,
+                onClick = { selectedTransport = R.drawable.bus }
+            )
         }
 
         Button(
