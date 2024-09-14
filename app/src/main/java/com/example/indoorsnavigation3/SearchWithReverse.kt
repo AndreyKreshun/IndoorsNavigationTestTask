@@ -35,7 +35,7 @@ fun SearchWithReverse() {
         ) {
             if (departure.isEmpty()) {
                 Text(
-                    text = "Москва", // Подсказка
+                    text = "Откуда", // Подсказка
                     color = Color.Gray
                 )
             }
@@ -74,7 +74,7 @@ fun SearchWithReverse() {
         ) {
             if (arrival.isEmpty()) {
                 Text(
-                    text = "Сергиев Посад", // Подсказка
+                    text = "Куда", // Подсказка
                     color = Color.Gray
                 )
             }
