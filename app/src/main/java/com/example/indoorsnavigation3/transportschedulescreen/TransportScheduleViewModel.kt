@@ -1,8 +1,9 @@
-package com.example.indoorsnavigation3
+package com.example.indoorsnavigation3.transportschedulescreen
 
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import com.example.indoorsnavigation3.R
 
 class TransportScheduleViewModel : ViewModel() {
 

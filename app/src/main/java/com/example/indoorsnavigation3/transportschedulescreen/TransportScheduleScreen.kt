@@ -1,4 +1,4 @@
-package com.example.indoorsnavigation3
+package com.example.indoorsnavigation3.transportschedulescreen
 
 
 import DateButton
@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.indoorsnavigation.button.TransportButton
+import com.example.indoorsnavigation3.R
 import com.example.indoorsnavigation3.button.TodayTomorrowButton
+import com.example.indoorsnavigation3.search.SearchWithReverse
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
