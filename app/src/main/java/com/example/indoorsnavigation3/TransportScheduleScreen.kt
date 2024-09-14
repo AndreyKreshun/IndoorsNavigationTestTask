@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.font.FontWeight
 import com.example.indoorsnavigation.button.TransportButton
+import com.example.indoorsnavigation3.button.TodayTomorrowButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,8 +69,12 @@ fun TransportScheduleScreen() {
                 .padding(bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            /*DateButton("Сегодня", selectedDate) { selectedDate = "Сегодня" }
-            DateButton("Завтра", selectedDate) { selectedDate = "Завтра" }*/
+            TodayTomorrowButton(text = "Сегодня", selectedDate) {
+                selectedDate = "Сегодня"
+            }
+            TodayTomorrowButton(text = "Завтра", selectedDate) {
+                selectedDate = "Завтра"
+            }
             DateButton("Дата", selectedDate) { selectedDate = "Дата" }
         }
 
