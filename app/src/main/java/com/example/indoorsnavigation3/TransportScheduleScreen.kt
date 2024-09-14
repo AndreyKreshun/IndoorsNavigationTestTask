@@ -2,30 +2,39 @@ package com.example.indoorsnavigation3
 
 
 import DateButton
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.indoorsnavigation.button.TransportButton
 import com.example.indoorsnavigation3.button.TodayTomorrowButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransportScheduleScreen() {
-    var fromText by remember { mutableStateOf("Москва") }
-    var toText by remember { mutableStateOf("") }
-    var selectedDate by remember { mutableStateOf("Сегодня") }
-    var selectedTransport by remember { mutableStateOf(R.drawable.any) } // Начальное значение - "любой"
+fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel()) {
 
+    // Используем состояние из ViewModel
+    val fromText by viewModel.fromText
+    val toText by viewModel.toText
+    val selectedDate by viewModel.selectedDate
+    val selectedTransport by viewModel.selectedTransport
 
     Column(
         modifier = Modifier
@@ -47,12 +56,12 @@ fun TransportScheduleScreen() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             TodayTomorrowButton(text = "Сегодня", selectedDate) {
-                selectedDate = "Сегодня"
+                viewModel.updateSelectedDate("Сегодня")
             }
             TodayTomorrowButton(text = "Завтра", selectedDate) {
-                selectedDate = "Завтра"
+                viewModel.updateSelectedDate("Завтра")
             }
-            DateButton("Дата", selectedDate) { selectedDate = "Дата" }
+            DateButton("Дата", selectedDate) { viewModel.updateSelectedDate("Дата") }
         }
 
         Row(
@@ -62,36 +71,34 @@ fun TransportScheduleScreen() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             TransportButton(
-                iconResId = R.drawable.any, // Иконка для "любой" (можете использовать текст или другую иконку)
+                iconResId = R.drawable.any, // Иконка для "любой"
                 selectedTransport = selectedTransport,
-                onClick = { selectedTransport = R.drawable.any } // Выбор "любой"
+                onClick = { viewModel.updateSelectedTransport(R.drawable.any) }
             )
-
-            // Кнопка для самолёта
             TransportButton(
                 iconResId = R.drawable.plane, // Иконка самолёта
                 selectedTransport = selectedTransport,
-                onClick = { selectedTransport = R.drawable.plane } // Выбор самолёта
+                onClick = { viewModel.updateSelectedTransport(R.drawable.plane) }
             )
             TransportButton(
                 iconResId = R.drawable.train, // Иконка поезда
                 selectedTransport = selectedTransport,
-                onClick = { selectedTransport = R.drawable.train }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.train) }
             )
             TransportButton(
                 iconResId = R.drawable.electric_train, // Иконка электропоезда
                 selectedTransport = selectedTransport,
-                onClick = { selectedTransport = R.drawable.electric_train }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.electric_train) }
             )
             TransportButton(
                 iconResId = R.drawable.bus, // Иконка автобуса
                 selectedTransport = selectedTransport,
-                onClick = { selectedTransport = R.drawable.bus }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.bus) }
             )
         }
 
         Button(
-            onClick = { /* Search logic */ },
+            onClick = { /* Логика поиска */ },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -102,6 +109,7 @@ fun TransportScheduleScreen() {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun TransportScheduleScreenPreview() {
