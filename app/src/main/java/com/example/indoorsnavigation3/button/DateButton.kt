@@ -29,9 +29,14 @@ fun DateButton(
     val datePickerDialog = DatePickerDialog(
         LocalContext.current,
         { _, selectedYear, selectedMonth, selectedDay ->
-            // Обновляем текст кнопки и вызываем callback
+            // Форматируем дату для отображения на кнопке (DD.MM.YYYY)
             dateText = "$selectedDay.${selectedMonth + 1}.$selectedYear"
-            onDateSelected(dateText)
+
+            // Преобразуем выбранную дату в формат ISO 8601 для API (YYYY-MM-DD)
+            val isoDate = "$selectedYear-${(selectedMonth + 1).toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}"
+
+            // Передаем дату в правильном формате через callback
+            onDateSelected(isoDate)
         }, year, month, day
     )
 
