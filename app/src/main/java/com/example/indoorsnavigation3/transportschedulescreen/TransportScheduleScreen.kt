@@ -1,6 +1,5 @@
 package com.example.indoorsnavigation3.transportschedulescreen
 
-
 import DateButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
