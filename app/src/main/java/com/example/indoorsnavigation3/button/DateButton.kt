@@ -51,7 +51,7 @@ fun DateButton(
         shape = RoundedCornerShape(4.dp)
     ) {
         Text(
-            text = dateText,
+            text = dateText,  // Отображаем дату в формате DD.MM.YYYY
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold
         )

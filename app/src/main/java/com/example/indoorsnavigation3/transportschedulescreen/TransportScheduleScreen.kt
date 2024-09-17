@@ -1,5 +1,4 @@
 package com.example.indoorsnavigation3.transportschedulescreen
-
 import DateButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,26 +12,25 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.indoorsnavigation.button.TransportButton
 import com.example.indoorsnavigation3.R
 import com.example.indoorsnavigation3.adapter.TransportCard
 import com.example.indoorsnavigation3.button.TodayTomorrowButton
+import com.example.indoorsnavigation3.data.Transport
 import com.example.indoorsnavigation3.search.SearchWithReverse
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel()) {
 
@@ -42,6 +40,10 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
     val selectedDate by viewModel.selectedDate
     val selectedTransport by viewModel.selectedTransport
     val transportData by viewModel.transportData // Данные о транспорте
+    // Получаем список рейсов из ViewModel
+    val transportSchedule by viewModel.transportSchedule
+    val transportList by viewModel.transportList // Данные из API
+    val coroutineScope = rememberCoroutineScope() // Создаем scope для корутин
 
     Column(
         modifier = Modifier
@@ -106,9 +108,7 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
 
         Button(
             onClick = {
-                println("Текущие данные для запроса: fromText=$fromText, toText=$toText, selectedDate=$selectedDate, selectedTransport=$selectedTransport")
-                viewModel.viewModelScope.launch {
-                    // Указываем тип транспорта в зависимости от нажатой кнопки
+                coroutineScope.launch {
                     val transportType = when (selectedTransport) {
                         R.drawable.plane -> "plane"
                         R.drawable.train -> "train"
@@ -116,8 +116,6 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
                         R.drawable.bus -> "bus"
                         else -> ""
                     }
-
-                    // Выполняем запрос с учетом фильтров
                     viewModel.fetchTransportSchedule(fromText, toText, selectedDate, transportType)
                 }
             },
@@ -130,16 +128,38 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
             Text(text = "Найти", fontSize = 18.sp)
         }
 
-        // Вывод данных в табличном виде
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(transportData) { transport ->
-                TransportCard(transport)
+
+        // Таблица результатов
+        // Отображение данных с использованием заглушек
+        LazyColumn(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (transportSchedule.isEmpty()) {
+                item {
+                    Text(text = "Рейсы не найдены", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                }
+            } else {
+                item {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(text = "Маршрут", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                        Text(text = "Отправление", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                        Text(text = "Прибытие", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                    }
+                }
+
+                items(transportSchedule) { transport ->
+                    TransportCard(transport = transport)
+                }
             }
         }
 
+    }
+}
+
+@Composable
+fun TransportCard(transport: Transport) {
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(text = transport.thread.title, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+        Text(text = transport.departure, modifier = Modifier.weight(1f))
+        Text(text = transport.arrival, modifier = Modifier.weight(1f))
     }
 }
 
