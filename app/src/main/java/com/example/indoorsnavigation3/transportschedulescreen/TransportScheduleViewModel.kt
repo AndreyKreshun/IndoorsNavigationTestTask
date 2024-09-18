@@ -20,72 +20,76 @@ import java.util.Locale
 
 class TransportScheduleViewModel : ViewModel() {
 
-    // Список для хранения данных рейсов
+    // Состояния
     private val _transportSchedule = mutableStateOf<List<Transport>>(emptyList())
     val transportSchedule: State<List<Transport>> = _transportSchedule
+
+    // Переменная для хранения сообщения об ошибке
+    private val _errorMessage = mutableStateOf("")
+    val errorMessage: State<String> = _errorMessage
 
     var transportList = mutableStateOf(listOf<Transport>())
         private set
 
     private val client = OkHttpClient()
 
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val isoFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
-    // Функция для выполнения запроса к Yandex Schedule API
+    // Функция для выполнения запроса к Yandex Schedule API с обработкой исключений
     suspend fun fetchTransportSchedule(from: String, to: String, date: String, transportType: String) {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val formattedDate = when (date) {
-            "Сегодня" -> dateFormat.format(Date())
-            "Завтра" -> {
-                val calendar = Calendar.getInstance()
-                calendar.add(Calendar.DATE, 1)
-                dateFormat.format(calendar.time)
-            }
-            else -> {
-                // Проверяем, соответствует ли дата формату YYYY-MM-DD
-                if (date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-                    date
-                } else {
-                    // Если нет, используем текущую дату
-                    dateFormat.format(Date())
+        try {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val formattedDate = when (date) {
+                "Сегодня" -> dateFormat.format(Date())
+                "Завтра" -> {
+                    val calendar = Calendar.getInstance()
+                    calendar.add(Calendar.DATE, 1)
+                    dateFormat.format(calendar.time)
+                }
+                else -> {
+                    // Проверка формата даты
+                    if (date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
+                        date
+                    } else {
+                        throw IllegalArgumentException("Некорректная дата: $date")
+                    }
                 }
             }
-        }
 
+            val apiKey = "f7f75891-ffa0-4223-9f6c-996a09634602"
+            val url = "https://api.rasp.yandex.net/v3.0/search/?from=$from&to=$to&date=$formattedDate&transport_types=$transportType&apikey=$apiKey&format=json&lang=ru_RU"
 
+            val request = Request.Builder().url(url).build()
 
-        val apiKey = "f7f75891-ffa0-4223-9f6c-996a09634602"
-        val url = "https://api.rasp.yandex.net/v3.0/search/?from=$from&to=$to&date=$formattedDate&transport_types=$transportType&apikey=$apiKey&format=json&lang=ru_RU"
+            withContext(Dispatchers.IO) {
+                val response = client.newCall(request).execute()
+                response.body?.use { responseBody ->
+                    val jsonObject = JSONObject(responseBody.string())
+                    val segments = jsonObject.getJSONArray("segments")
 
-        val request = Request.Builder().url(url).build()
+                    val transportListData = mutableListOf<Transport>()
+                    for (i in 0 until segments.length()) {
+                        val segment = segments.getJSONObject(i)
+                        val thread = segment.getJSONObject("thread")
 
-        withContext(Dispatchers.IO) {
-            val response = client.newCall(request).execute()
-            response.body?.use { responseBody ->
-                val jsonObject = JSONObject(responseBody.string())
-                val segments = jsonObject.getJSONArray("segments")
+                        val transport = Transport(
+                            transportType = transportType,
+                            thread = ThreadInfo(
+                                number = thread.getString("number"),
+                                title = thread.getString("title")
+                            ),
+                            departure = segment.getString("departure"),
+                            arrival = segment.getString("arrival"),
+                            fromCode = segment.getString("departure_platform"),
+                            toCode = segment.getString("arrival_platform")
+                        )
+                        transportListData.add(transport)
+                    }
 
-                val transportListData = mutableListOf<Transport>()
-                for (i in 0 until segments.length()) {
-                    val segment = segments.getJSONObject(i)
-                    val thread = segment.getJSONObject("thread")
-
-                    val transport = Transport(
-                        transportType = transportType,
-                        thread = ThreadInfo(
-                            number = thread.getString("number"),
-                            title = thread.getString("title")
-                        ),
-                        departure = segment.getString("departure"),
-                        arrival = segment.getString("arrival"),
-                        fromCode = segment.getString("departure_platform"),
-                        toCode = segment.getString("arrival_platform")
-                    )
-                    transportListData.add(transport)
+                    _transportSchedule.value = transportListData
                 }
-
-                _transportSchedule.value = transportListData
             }
+        } catch (e: Exception) {
+            // Если произошла ошибка, сохраняем сообщение в переменной _errorMessage
+            _errorMessage.value = "Ошибка при загрузке данных: ${e.localizedMessage}"
         }
     }
 
@@ -97,10 +101,6 @@ class TransportScheduleViewModel : ViewModel() {
     var selectedDate = mutableStateOf("Сегодня")
         private set
     var selectedTransport = mutableStateOf(R.drawable.any)
-        private set
-
-    // Состояние для списка расписаний транспорта
-    var transportData = mutableStateOf<List<Transport>>(emptyList())
         private set
 
     // Обновление текстов
@@ -125,8 +125,4 @@ class TransportScheduleViewModel : ViewModel() {
     fun updateSelectedTransport(newTransport: Int) {
         selectedTransport.value = newTransport
     }
-
-
 }
-
-

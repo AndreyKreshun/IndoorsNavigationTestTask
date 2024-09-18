@@ -33,13 +33,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel()) {
-
     // Получаем состояния из ViewModel
     val fromText by viewModel.fromText
     val toText by viewModel.toText
     val selectedDate by viewModel.selectedDate
     val selectedTransport by viewModel.selectedTransport
-    val transportData by viewModel.transportData // Данные о транспорте
+    //val transportData by viewModel.transportData // Данные о транспорте
     // Получаем список рейсов из ViewModel
     val transportSchedule by viewModel.transportSchedule
     val transportList by viewModel.transportList // Данные из API
