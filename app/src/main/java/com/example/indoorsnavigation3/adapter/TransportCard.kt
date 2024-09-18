@@ -12,9 +12,15 @@ import androidx.compose.ui.unit.dp
 import com.example.indoorsnavigation3.R
 import com.example.indoorsnavigation3.data.ThreadInfo
 import com.example.indoorsnavigation3.data.Transport
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun TransportCard(transport: Transport) {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+    val departureDateTime = LocalDateTime.parse(transport.departure, formatter)
+    val arrivalDateTime = LocalDateTime.parse(transport.arrival, formatter)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,9 +47,14 @@ fun TransportCard(transport: Transport) {
 
         Column(modifier = Modifier.weight(1f)) {
             // Время отправления
-            Text(text = "Отправление: ${transport.departure}")
+            Text(text = "Отправление:")
+            Text(text = departureDateTime.toLocalDate().toString())  // Отображение даты
+            Text(text = departureDateTime.toLocalTime().toString())  // Отображение времени
+
             // Время прибытия
-            Text(text = "Прибытие: ${transport.arrival}")
+            Text(text = "Прибытие:")
+            Text(text = arrivalDateTime.toLocalDate().toString())    // Отображение даты
+            Text(text = arrivalDateTime.toLocalTime().toString())    // Отображение времени
         }
     }
 }
