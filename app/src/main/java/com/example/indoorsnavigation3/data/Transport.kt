@@ -9,8 +9,4 @@ data class Transport(
     val toCode: String         // Код станции прибытия
 )
 
-data class ThreadInfo(
-    val number: String,    // Номер рейса
-    val title: String      // Полное название маршрута
-)
 

@@ -42,7 +42,7 @@ fun TransportCard(transport: Transport) {
 
         Column(modifier = Modifier.weight(1f)) {
             // Время отправления
-            Text(text = "Отправление: ${transport.departure}")
+            Text(text = "Отправление: ${transport.departure}  ")
             // Время прибытия
             Text(text = "Прибытие: ${transport.arrival}")
         }
@@ -68,4 +68,3 @@ fun TransportCardPreview() {
         TransportCard(transport = sampleTransport)
     }
 }
-
