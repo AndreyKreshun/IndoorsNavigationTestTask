@@ -86,30 +86,36 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
                 .padding(bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            // Добавляем weight для равномерного распределения кнопок
             TransportButton(
                 iconResId = R.drawable.any,
                 selectedTransport = selectedTransport,
-                onClick = { viewModel.updateSelectedTransport(R.drawable.any) }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.any) },
+                modifier = Modifier.weight(1f) // Равномерное распределение
             )
             TransportButton(
                 iconResId = R.drawable.plane,
                 selectedTransport = selectedTransport,
-                onClick = { viewModel.updateSelectedTransport(R.drawable.plane) }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.plane) },
+                modifier = Modifier.weight(1f)
             )
             TransportButton(
                 iconResId = R.drawable.train,
                 selectedTransport = selectedTransport,
-                onClick = { viewModel.updateSelectedTransport(R.drawable.train) }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.train) },
+                modifier = Modifier.weight(1f)
             )
             TransportButton(
                 iconResId = R.drawable.electric_train,
                 selectedTransport = selectedTransport,
-                onClick = { viewModel.updateSelectedTransport(R.drawable.electric_train) }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.electric_train) },
+                modifier = Modifier.weight(1f)
             )
             TransportButton(
                 iconResId = R.drawable.bus,
                 selectedTransport = selectedTransport,
-                onClick = { viewModel.updateSelectedTransport(R.drawable.bus) }
+                onClick = { viewModel.updateSelectedTransport(R.drawable.bus) },
+                modifier = Modifier.weight(1f)
             )
         }
 

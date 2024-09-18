@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@Composable
+/*@Composable
 fun TransportButton(text: String, selectedTransport: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
@@ -28,27 +28,27 @@ fun TransportButton(text: String, selectedTransport: String, onClick: () -> Unit
     ) {
         Text(text = text, fontSize = 14.sp)
     }
-}
+}*/
 @Composable
 fun TransportButton(
     iconResId: Int, // Идентификатор ресурса иконки
     selectedTransport: Int, // Идентификатор выбранной иконки (или типа транспорта)
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier // Добавили модификатор как параметр
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = if (iconResId == selectedTransport) Color.Gray else Color.LightGray
         ),
-        modifier = Modifier
-            .padding(horizontal = 4.dp),
+        modifier = modifier.padding(horizontal = 2.dp), // Уменьшили отступы
         shape = RoundedCornerShape(4.dp)
     ) {
         Icon(
             painter = painterResource(id = iconResId), // Отображение иконки
             contentDescription = null, // Если описание иконки не нужно
             tint = Color.Black, // Цвет иконки
-            modifier = Modifier.size(24.dp) // Размер иконки
+            modifier = Modifier.size(20.dp) // Уменьшили размер иконки
         )
     }
 }
