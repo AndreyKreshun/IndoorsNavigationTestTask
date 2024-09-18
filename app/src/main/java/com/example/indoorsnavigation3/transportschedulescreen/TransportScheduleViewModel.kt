@@ -41,8 +41,18 @@ class TransportScheduleViewModel : ViewModel() {
                 calendar.add(Calendar.DATE, 1)
                 dateFormat.format(calendar.time)
             }
-            else -> date
+            else -> {
+                // Проверяем, соответствует ли дата формату YYYY-MM-DD
+                if (date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
+                    date
+                } else {
+                    // Если нет, используем текущую дату
+                    dateFormat.format(Date())
+                }
+            }
         }
+
+
 
         val apiKey = "f7f75891-ffa0-4223-9f6c-996a09634602"
         val url = "https://api.rasp.yandex.net/v3.0/search/?from=$from&to=$to&date=$formattedDate&transport_types=$transportType&apikey=$apiKey&format=json&lang=ru_RU"

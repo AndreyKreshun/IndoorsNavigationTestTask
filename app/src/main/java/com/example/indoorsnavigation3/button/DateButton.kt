@@ -19,6 +19,16 @@ fun DateButton(
 ) {
     var dateText by remember { mutableStateOf(initialText) }
 
+    // Обновляем dateText, когда selectedDate изменяется
+    LaunchedEffect(selectedDate) {
+        // Если selectedDate в формате ISO, преобразуем его в формат DD.MM.YYYY для отображения
+        if (selectedDate.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
+            val parts = selectedDate.split("-")
+            dateText = "${parts[2]}.${parts[1]}.${parts[0]}"
+        }
+    }
+
+    // Остальной код остается без изменений...
     // Календарь будет использовать текущую дату как начальную
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
@@ -30,7 +40,7 @@ fun DateButton(
         LocalContext.current,
         { _, selectedYear, selectedMonth, selectedDay ->
             // Форматируем дату для отображения на кнопке (DD.MM.YYYY)
-            dateText = "$selectedDay.${selectedMonth + 1}.$selectedYear"
+            dateText = "${selectedDay.toString().padStart(2, '0')}.${(selectedMonth + 1).toString().padStart(2, '0')}.$selectedYear"
 
             // Преобразуем выбранную дату в формат ISO 8601 для API (YYYY-MM-DD)
             val isoDate = "$selectedYear-${(selectedMonth + 1).toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}"

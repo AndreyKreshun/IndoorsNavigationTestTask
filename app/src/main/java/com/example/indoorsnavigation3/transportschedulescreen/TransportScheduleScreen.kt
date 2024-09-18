@@ -70,7 +70,14 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
             TodayTomorrowButton(text = "Завтра", selectedDate) {
                 viewModel.updateSelectedDate("Завтра")
             }
-            DateButton("Дата", selectedDate) { viewModel.updateSelectedDate("Дата") }
+            DateButton(
+                initialText = "Дата",
+                selectedDate = selectedDate,
+                onDateSelected = { newDate ->
+                    viewModel.updateSelectedDate(newDate)
+                }
+            )
+
         }
 
         Row(
@@ -154,14 +161,6 @@ fun TransportScheduleScreen(viewModel: TransportScheduleViewModel = viewModel())
     }
 }
 
-@Composable
-fun TransportCard(transport: Transport) {
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = transport.thread.title, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-        Text(text = transport.departure, modifier = Modifier.weight(1f))
-        Text(text = transport.arrival, modifier = Modifier.weight(1f))
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
