@@ -1,10 +1,6 @@
 package com.example.indoorsnavigation3.adapter
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,15 +30,18 @@ fun TransportCard(transport: Transport) {
                     "автобус" -> Icon(painterResource(R.drawable.bus), contentDescription = null)
                     else -> Icon(painterResource(R.drawable.any), contentDescription = null)
                 }
-                // Маршрут
-                Text(text = "${transport.thread}", fontWeight = FontWeight.Bold)
+                // Отображение номера и маршрута
+                Column {
+                    Text(text = transport.thread.number, fontWeight = FontWeight.Bold)
+                    Text(text = transport.thread.title)
+                }
             }
             Text(text = transport.transportType)
         }
 
         Column(modifier = Modifier.weight(1f)) {
             // Время отправления
-            Text(text = "Отправление: ${transport.departure}  ")
+            Text(text = "Отправление: ${transport.departure}")
             // Время прибытия
             Text(text = "Прибытие: ${transport.arrival}")
         }
